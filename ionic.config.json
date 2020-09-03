@@ -1,0 +1,8 @@
+{
+  "name": "foodies",
+  "integrations": {
+    "cordova": {},
+    "capacitor": {}
+  },
+  "type": "angular"
+}

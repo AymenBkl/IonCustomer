@@ -1,0 +1,115 @@
+.mainContent {
+  padding: 20px;
+  ion-label {
+    display: block !important;
+    margin-bottom: 10px;
+  }
+  .noData {
+    text-align: center;
+    margin-top: 30%;
+
+    .noDataImg {
+      width: 100%;
+      padding: 0 20%;
+      margin-bottom: 20px;
+    }
+  }
+  .haveData {
+    .myOrders {
+      border: 1px solid lightgray;
+      border-radius: 5px;
+      padding: 10px;
+      .restInfo {
+        .cover {
+          height: 50px;
+          width: 50px;
+          border-radius: 5px;
+          position: absolute;
+          left: 20px;
+        }
+        .restName {
+          font-size: 0.8rem;
+          font-weight: bold;
+          color: black;
+          text-transform: capitalize;
+          display: block;
+        }
+        .deliveryAddress {
+          font-size: 0.7rem;
+          display: block;
+          color: gray;
+        }
+      }
+    }
+
+    .card_div {
+      width: 100%;
+      box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      border: 0.5px solid lightgray;
+
+      .line_div {
+        height: 1px;
+        width: 100%;
+        background: lightgray;
+        margin-top: 10px;
+        margin-bottom: 10px;
+      }
+      .resto_detail {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        .back_image {
+          height: 50px;
+          width: 50px;
+          background-position: center;
+          background-size: cover;
+          background-repeat: no-repeat;
+          border-radius: 5px;
+          min-width: 50px;
+        }
+
+        .res_name {
+          font-weight: 600;
+        }
+        .res_location {
+          color: #000;
+          font-size: 14px;
+        }
+      }
+
+      .order_detail {
+        .head_gray {
+          color: #000;
+          font-size: 13px;
+          margin-top: 10px;
+        }
+        .small_lbl {
+          font-size: 12px;
+          font-weight: 600;
+        }
+      }
+      .status_detail {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        color: #000;
+        font-size: 14px;
+
+        // .rate_lbl{
+        //     background: #b2d9b2;
+        //     border: 1px solid #7bdb7b;
+        //     padding: 0px 7px;
+        //     color: green;
+        //     border-radius: 25px;
+        //     font-size: 12px;
+        //     font-weight: 600;
+        //     margin-left: 5px;
+        // }
+      }
+    }
+  }
+}

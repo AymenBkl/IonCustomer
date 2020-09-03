@@ -1,0 +1,33 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{'Select Country' | translate}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div>
+    <ion-list>
+      <ion-radio-group [(ngModel)]="selectedCountry">
+        <ion-item>
+          <ion-label>Ireland</ion-label>
+          <ion-radio mode="md" slot="start" value="IE"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>United Kingdom</ion-label>
+          <ion-radio mode="md" slot="start" value="GB"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+  </div>
+  <ion-fab
+    vertical="bottom"
+    horizontal="end"
+    slot="fixed"
+    *ngIf="selectedCountry"
+    (click)="goNext()"
+  >
+    <ion-fab-button>
+      <ion-icon name="arrow-forward-outline"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+</ion-content>
