@@ -180,11 +180,7 @@ const routes: Routes = [
         (m) => m.VariationPageModule
       ),
   },
-  {
-    path: "country",
-    loadChildren: () =>
-      import("./pages/country/country.module").then((m) => m.CountryPageModule),
-  },
+  
 ];
 @NgModule({
   imports: [

@@ -49,7 +49,7 @@ export class CategoryPage implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.currency = localStorage.getItem("selectedCountry") == "IE" ? "€" : "£";
+    this.currency = "€";
     this.route.queryParams.subscribe((data) => {
       console.log("data=>", data);
       if (data.hasOwnProperty("id")) {
