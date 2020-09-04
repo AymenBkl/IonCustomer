@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { ActivatedRoute, NavigationExtras } from "@angular/router";
+import { ModalController,NavParams } from '@ionic/angular';
+
 import {
   NavController,
   AlertController,
@@ -9,6 +11,8 @@ import { ApisService } from "src/app/services/apis.service";
 import { UtilService } from "src/app/services/util.service";
 import { Router } from "@angular/router";
 import { MenuComponent } from "src/app/components/menu/menu.component";
+import { OptionsPage } from '../options/options.page';
+import { min } from 'moment';
 
 @Component({
   selector: "app-category",
@@ -24,6 +28,8 @@ export class CategoryPage implements OnInit {
   address: any;
   ratting: any;
   time: any;
+  open : any;
+  close : any;
   totalRatting: any;
   dishPrice: any;
   cusine: any[] = [];
@@ -36,6 +42,7 @@ export class CategoryPage implements OnInit {
   totalPrice: any = 0;
   deliveryAddress: any = "";
   currency: any = "";
+  extras = [];
   private allergenInfoImage: any = "";
 
   constructor(
@@ -45,7 +52,8 @@ export class CategoryPage implements OnInit {
     private navCtrl: NavController,
     private alertController: AlertController,
     private router: Router,
-    private popoverController: PopoverController
+    private popoverController: PopoverController,
+    private modalCntrl : ModalController,
   ) {}
 
   ngOnInit() {
@@ -59,6 +67,7 @@ export class CategoryPage implements OnInit {
         this.navCtrl.navigateRoot(["tabs"]);
       }
     });
+
   }
 
   getAddress() {
@@ -87,7 +96,10 @@ export class CategoryPage implements OnInit {
             this.dishPrice = data.dishPrice;
             this.time = data.time;
             this.cusine = data.cusine;
+            this.open = data.openTime;
+            this.close = data.closeTime;
 
+            console.log(this.checkTime());
             /*const vid = localStorage.getItem('vid');
         console.log('id', vid, this.id);
         if (vid && vid !== this.id) {
@@ -120,6 +132,7 @@ export class CategoryPage implements OnInit {
         console.log(error);
         this.util.errorToast(this.util.translate("Something went wrong"));
       });
+
   }
 
   getCates() {
@@ -321,7 +334,8 @@ export class CategoryPage implements OnInit {
   getCusine(cusine) {
     return cusine.join("-");
   }
-  add(index) {
+  add(index,catename) {
+    if (this.checkTime()){
     this.api
       .checkAuth()
       .then((user) => {
@@ -331,9 +345,9 @@ export class CategoryPage implements OnInit {
             this.presentAlertConfirm();
             return false;
           }
+          this.createModal(index,catename);
           console.log(this.foods[index]);
-          this.foods[index].quantiy = 1;
-          this.calculate();
+          
         } else {
           this.router.navigate(["login"]);
         }
@@ -341,6 +355,11 @@ export class CategoryPage implements OnInit {
       .catch((error) => {
         console.log(error);
       });
+    } else {
+      this.util.errorToast("The restaurant is open from "+ this.open + " to " + this.close);
+
+    }
+
   }
 
   statusChange() {
@@ -348,6 +367,9 @@ export class CategoryPage implements OnInit {
     this.changeStatus();
   }
   calculate() {
+    var extratotal = this.extras.reduce(function(prev, cur) {
+      return prev + cur;
+    }, 0);
     this.dummy = [];
     console.log("khaliiii", this.dummy);
     console.log(this.foods);
@@ -357,8 +379,10 @@ export class CategoryPage implements OnInit {
     this.totalItem = 0;
     item.forEach((element) => {
       this.totalItem = this.totalItem + element.quantiy;
-      this.totalPrice =
-        this.totalPrice + parseFloat(element.price) * parseInt(element.quantiy);
+      this.totalPrice +=
+         parseFloat(element.price) * parseInt(element.quantiy) + parseFloat(extratotal);
+        console.log(this.totalPrice);
+        console.log(parseFloat(extratotal))
     });
     this.totalPrice = parseFloat(this.totalPrice).toFixed(2);
     console.log("total item", this.totalItem);
@@ -399,16 +423,26 @@ export class CategoryPage implements OnInit {
     this.foods = this.dummyFoods.filter((x) => x.veg === this.veg);
   }
   addQ(index) {
+    if (this.checkTime()){
     this.foods[index].quantiy = this.foods[index].quantiy + 1;
     this.calculate();
+    } else {
+      this.util.errorToast("The restaurant is open from "+ this.open + " to " + this.close);
+    }
   }
   removeQ(index) {
+    if (this.checkTime()){
+    
     if (this.foods[index].quantiy !== 0) {
       this.foods[index].quantiy = this.foods[index].quantiy - 1;
     } else {
       this.foods[index].quantiy = 0;
     }
     this.calculate();
+  }
+  else {
+    this.util.errorToast("The restaurant is open from "+ this.open + " to " + this.close);
+  }
   }
 
   async presentAlertConfirm() {
@@ -484,5 +518,49 @@ export class CategoryPage implements OnInit {
 
   get allergenInfo() {
     return this.allergenInfoImage;
+  }
+
+  async createModal(index,catename)  {
+    let meal : boolean;
+    if (catename === "A La Carte"){
+      meal = true;
+    }
+    else {
+      meal = false;
+    }
+    const modal = await this.modalCntrl.create({
+      component : OptionsPage,
+      componentProps : {
+        "meal" : meal
+      }
+    });
+
+    modal.onDidDismiss()
+          .then(data => {
+            if (data.data != null){
+              this.extras.push(Number(data.data.size.extra));
+              
+              this.foods[index].quantiy = 1;
+              this.calculate();
+              console.log(data.data.size);
+            }
+          },
+          err => {
+            console.log(err);
+          });
+    return await modal.present();
+  }
+
+  checkTime() : boolean {
+    let now: string;
+    now = new Date().toString().split(' ')[4];
+    let hours = now.split(':')[0];
+    let minutes = now.split(':')[1];
+    if (now < this.close && now > this.open){
+      return true;
+    }
+    else  {
+      return false;
+    }
   }
 }

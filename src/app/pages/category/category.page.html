@@ -116,7 +116,7 @@
 
                           <div class="cartBtns">
                             <div class="cartBtn" *ngIf="item.quantiy <= 0">
-                              <ion-label class="btns" (click)="add(i)"
+                              <ion-label class="btns" (click)="add(i,cate.name)"
                                 >{{'Add' | translate}}</ion-label
                               >
                               <!-- <ion-button (click)="add(i)" size="small" expand="block" fill="outline" shape="round">

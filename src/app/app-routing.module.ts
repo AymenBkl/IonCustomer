@@ -180,6 +180,10 @@ const routes: Routes = [
         (m) => m.VariationPageModule
       ),
   },
+  {
+    path: 'options',
+    loadChildren: () => import('./pages/options/options.module').then( m => m.OptionsPageModule)
+  },
   
 ];
 @NgModule({

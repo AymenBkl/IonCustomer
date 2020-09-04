@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons end>
+      <button ion-button  (click)="dissMiss()" >
+        <ion-icon name="close"  *ngIf="!platform.is('ios')"></ion-icon>
+        <span ion-text *ngIf="platform.is('ios')">Cancel</span>
+      </button>
+    </ion-buttons>
+    <ion-title>More Options</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="styled">
+  <div class="container">
+    <h3>Size (required) </h3>
+      <ion-item lines="none" class="input-look" *ngFor="let entry of sizes">
+      <ion-checkbox slot="start"  (click)="checkedSize(entry)" [checked]="entry.isChecked" [(ngModel)]="entry.isChecked"></ion-checkbox>
+      <label>{{entry.val}}</label>
+      <label slot="end" *ngIf="entry.extra > 0">{{entry.extra}}</label>
+
+    </ion-item>
+    <div *ngIf="ismeal">
+    <h3>Meal Drink (required) </h3>
+      <ion-item lines="none" class="input-look">
+      <ion-checkbox slot="start"></ion-checkbox>
+      <label>Coca-Cola</label>
+    </ion-item>
+    <ion-item lines="none" class="input-look">
+      <ion-checkbox slot="start"></ion-checkbox>
+      <label>Coke Zero</label>
+    </ion-item>
+  </div>
+    <button ion-button (click)="onSubmit()" >Submit</button>
+  </div>
+
+</ion-content>

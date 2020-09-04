@@ -12,6 +12,7 @@ import { CategoryPage } from "./category.page";
 import { MenuComponent } from "src/app/components/menu/menu.component";
 import { ComponentsModule } from "src/app/components/components.module";
 import { SharedModule } from "src/app/directives/shared.module";
+import {OptionsPageModule} from "../options/options.module"
 
 @NgModule({
   entryComponents: [MenuComponent],
@@ -23,6 +24,7 @@ import { SharedModule } from "src/app/directives/shared.module";
     ComponentsModule,
     SharedModule,
     NgxIonicImageViewerModule,
+    OptionsPageModule
   ],
   declarations: [CategoryPage],
 })
