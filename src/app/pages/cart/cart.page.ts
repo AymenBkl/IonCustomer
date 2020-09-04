@@ -44,6 +44,12 @@ export class CartPage implements OnInit {
     total: any;
     dummy = Array(10);
     couponCode: string;
+    displaySegment : boolean = true;
+    delivryTime : any;
+    open : any;
+    close : any;
+    min : any;
+    hours : any;
 
     constructor(
         private api: ApisService,
@@ -61,9 +67,12 @@ export class CartPage implements OnInit {
         localStorage.setItem("coupon", JSON.stringify(data));
         this.calculate();
       }
+      
     });
         this.getOffers();
         this.getCoupons();
+        this.min = new Date().toISOString();
+        
   }
   
   ngOnInit() {
@@ -114,6 +123,14 @@ export class CartPage implements OnInit {
             this.time = data.time;
             this.totalRatting = data.totalRatting;
             this.minimumOrder = data.minimumOrder;
+            this.open = data.openTime;
+            this.close = data.closeTime;
+            
+            this.min = this.min.split('T')[0] + "T" + this.open + "Z";
+            console.log(this.min);
+            let lenght = Number(this.close.split(':')[0]) - Number(this.open.split(':')[0]) + 1;
+            this.hours = Array.from(new Array(lenght), (x,i) => i+Number(this.open.split(':')[0]));
+            console.log(this.hours);
           }
         },
         (error) => {
@@ -403,4 +420,8 @@ export class CartPage implements OnInit {
         this.serviceCharge = (this.serviceChargeRate * this.grandTotal)/100;
         this.grandTotal = +this.serviceCharge + +this.grandTotal;
     }
+
+  switchSegment(order : boolean) : void {
+    this.displaySegment = order;
+  }
 }

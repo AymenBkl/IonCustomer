@@ -98,8 +98,6 @@ export class CategoryPage implements OnInit {
             this.cusine = data.cusine;
             this.open = data.openTime;
             this.close = data.closeTime;
-
-            console.log(this.checkTime());
             /*const vid = localStorage.getItem('vid');
         console.log('id', vid, this.id);
         if (vid && vid !== this.id) {
