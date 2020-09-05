@@ -2,11 +2,11 @@ import { NgModule } from "@angular/core";
 import { BrowserModule } from "@angular/platform-browser";
 import { RouteReuseStrategy } from "@angular/router";
 
+import { AgmCoreModule} from '@agm/core';
 import { IonicModule, IonicRouteStrategy } from "@ionic/angular";
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
 import { StatusBar } from "@ionic-native/status-bar/ngx";
 import { AdMobFree } from "@ionic-native/admob-free/ngx";
-
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 
@@ -34,7 +34,10 @@ import { TranslateHttpLoader } from "@ngx-translate/http-loader";
 
 import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 
+import {googleMapApi} from '../environments/environment.prod';
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
+import {GoogleMapService} from "./services/google-map.service";
+import { NativeGeocoder, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 export function customTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
@@ -66,6 +69,11 @@ export function LanguageLoader(http: HttpClient) {
     }),
     NgPipesModule,
     NgxIonicImageViewerModule,
+    AgmCoreModule.forRoot({
+      apiKey : "AIzaSyDraNOYxpwzp1K8MKF35l47P5ikCrFqraI",
+      libraries: ['geometry']
+    }
+    )
   ],
   providers: [
     StatusBar,
@@ -79,6 +87,9 @@ export function LanguageLoader(http: HttpClient) {
     PayPal,
     AdMobFree,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    GoogleMapService,
+    NativeGeocoder,
+    
   ],
   bootstrap: [AppComponent],
 })

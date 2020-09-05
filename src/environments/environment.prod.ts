@@ -23,4 +23,10 @@ export const environment = {
     sandbox: "",
     production: "YOUR_PRODUCTION_CLIENT_ID",
   },
+
+  googleMapApi : {
+    api : 'AIzaSyDraNOYxpwzp1K8MKF35l47P5ikCrFqraI'
+  }
 };
+
+export const googleMapApi = 'AIzaSyDraNOYxpwzp1K8MKF35l47P5ikCrFqraI';

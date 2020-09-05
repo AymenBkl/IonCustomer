@@ -7,6 +7,7 @@ import { Router } from "@angular/router";
 import { OneSignal } from "@ionic-native/onesignal/ngx";
 import { environment } from "src/environments/environment";
 import { TranslateService } from "@ngx-translate/core";
+import { GoogleMapService} from "./services/google-map.service"
 @Component({
   selector: "app-root",
   templateUrl: "app.component.html",
@@ -19,7 +20,8 @@ export class AppComponent {
     private statusBar: StatusBar,
     private router: Router,
     private oneSignal: OneSignal,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private googleMaps : GoogleMapService
   ) {
     const lng = localStorage.getItem("language");
     if (!lng || lng === null) {
@@ -29,6 +31,8 @@ export class AppComponent {
     this.initializeApp();
 
     localStorage.setItem("selectedCountry", "IE");
+
+    
   }
 
   initializeApp() {
