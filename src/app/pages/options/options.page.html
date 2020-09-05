@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-buttons end>
+    <ion-buttons slot="start">
       <button ion-button  (click)="dissMiss()" >
         <ion-icon name="close"  *ngIf="!platform.is('ios')"></ion-icon>
         <span ion-text *ngIf="platform.is('ios')">Cancel</span>

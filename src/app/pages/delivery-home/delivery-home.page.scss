@@ -1,0 +1,36 @@
+.deliver-div {
+    width : 80%;
+    margin-left : 5%;
+    font-size : 65%;
+    overflow:hidden;
+  }
+  
+ion-row {
+    margin-bottom : 40px;
+    text-align : start;
+}
+
+ion-card {
+    margin : 0;
+}
+
+.changeButton {
+    --background: none !important;
+    --background-color: none !important;
+    --box-shadow: none !important;
+    --color : green;
+    
+}
+
+.payButton {
+    text-align: center;
+    width : 80%;
+    align-self: center;
+}
+
+#last-row {
+    bottom : 0;
+    margin-top : 18.5%;
+    margin-bottom : 0;
+}
+

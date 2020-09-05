@@ -1,9 +1,79 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>deliveryHome</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="back()">
+        <ion-icon name="arrow-back-outline" *ngIf="!platform.is('ios')"></ion-icon>
+        <ion-label *ngIf="platform.is('ios')">Back</ion-label>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Delivery Home</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12">
+        <ion-card>
+        <ion-item lines="none" class="ion-no-padding">
+          <ion-thumbnail>
+            <img src="../../../assets/imgs/logo.jpg" width="100px">
+          </ion-thumbnail>
+          <div class="deliver-div">
+          <ion-label>Deliver in around 50min</ion-label>
+          <ion-label>Deliver by Eastern Tandori</ion-label>
+        </div>
+        </ion-item>
+      </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-text ><h5><strong>Deliver To</strong></h5></ion-text>
+        <ion-card>
+        <ion-item lines="none" >
+          <ion-icon name="home-outline" slot="start"></ion-icon>
+          <ion-input type="text" placeHolder="Add an Address">
+          </ion-input>
+        </ion-item>
+      </ion-card>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12">
+        <ion-item lines="none" class="ion-no-padding">
+        <ion-text slot="start"><h5><strong>Payment</strong></h5></ion-text>
+        <ion-button slot="end" class="changeButton">Change</ion-button>
+      </ion-item>
+        <ion-card>
+        <ion-item lines="none">
+          <ion-icon name="logo-apple" slot="start" *ngIf="platform.is('ios')"></ion-icon>
+          <ion-icon name="logo-android" slot="start" *ngIf="!platform.is('ios')"></ion-icon>
+          <ion-label *ngIf="platform.is('ios')" > 
+            Apple Pay
+          </ion-label>
+          <ion-label *ngIf="!platform.is('ios')" > 
+            Android Pay
+          </ion-label>
+        </ion-item>
+      </ion-card>
+      </ion-col>
+    </ion-row>
 
+    <ion-row id="last-row">
+      <ion-col size="12">
+        <ion-card style="text-align: center;">
+      <ion-item lines="none">
+          <ion-text  slot="start">Total</ion-text>
+          <ion-text   slot="end" item-right><strong>Total</strong></ion-text>
+      </ion-item>
+      <ion-button class="payButton">
+        <ion-icon name="logo-apple" *ngIf="platform.is('ios')"></ion-icon>
+        <ion-icon name="logo-android"  *ngIf="!platform.is('ios')"></ion-icon>
+        <ion-label>Pay</ion-label>
+      </ion-button>
+    </ion-card>
+    </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -4,6 +4,7 @@ import { UtilService } from "src/app/services/util.service";
 import { Router, NavigationExtras } from "@angular/router";
 import { NavController } from "@ionic/angular";
 import * as moment from 'moment';
+import { DeliveryHomePage } from '../delivery-home/delivery-home.page';
 
 @Component({
     selector: 'app-cart',
@@ -423,5 +424,9 @@ export class CartPage implements OnInit {
 
   switchSegment(order : boolean) : void {
     this.displaySegment = order;
+  }
+
+  openDeliveryHome() : void {
+    this.navCtrl.navigateForward("/delivery-home");
   }
 }

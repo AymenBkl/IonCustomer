@@ -18,7 +18,7 @@ export class OptionsPage implements OnInit {
   ismeal : boolean;
   constructor(private modalCntrl : ModalController,
               private navParams : NavParams,
-              private platform : Platform) { 
+              public platform : Platform) { 
   }
 
   ngOnInit() {
