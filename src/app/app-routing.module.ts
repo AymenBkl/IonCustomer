@@ -184,6 +184,10 @@ const routes: Routes = [
     path: 'options',
     loadChildren: () => import('./pages/options/options.module').then( m => m.OptionsPageModule)
   },
+  {
+    path: 'delivery-home',
+    loadChildren: () => import('./pages/delivery-home/delivery-home.module').then( m => m.DeliveryHomePageModule)
+  },
   
 ];
 @NgModule({

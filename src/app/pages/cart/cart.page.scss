@@ -217,4 +217,16 @@ ion-toolbar {
       margin-bottom: 10px;
     }
   }
+
+  
 }
+.deliver-div {
+  width : 60%;
+  margin-left : 5%;
+  font-size : 65%;
+  overflow:hidden;
+}
+
+.deliver-div + ion-button {
+  --background	 : green;
+} 

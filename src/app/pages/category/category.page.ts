@@ -554,6 +554,7 @@ export class CategoryPage implements OnInit {
     now = new Date().toString().split(' ')[4];
     let hours = now.split(':')[0];
     let minutes = now.split(':')[1];
+    now = "11:00";
     if (now < this.close && now > this.open){
       return true;
     }
