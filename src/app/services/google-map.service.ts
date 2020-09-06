@@ -91,10 +91,10 @@ calculateDistance(address1 : string,address2 : string)  {
           console.log(response);
           if (status === 'OK') {
             var result = response.routes[0].legs[0];
-            const distance = result.distance.text;
-            const duration =  result.duration.text;
-            localStorage.setItem("homeAddresse","{address : "+ address2 + ",distance : "+ distance +", duration : "+ duration +" }");
-            console.log(result.duration.text,result.distance.text,result.departure_time.text);
+            const distance = result.distance.value.toFixed();
+            const duration =  result.duration.value.toFixed();
+            localStorage.removeItem("homeAddresse");
+            localStorage.setItem("homeAddresse",'{"address" : "'+ address2 + '","distance" : "'+ distance +'", "duration" : "'+ duration +'" }');
           }
         })
           console.log(google.maps.geometry.spherical.computeDistanceBetween(this.place1,this.place2));

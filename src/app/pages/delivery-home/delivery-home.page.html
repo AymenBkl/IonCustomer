@@ -20,8 +20,10 @@
             <img src="../../../assets/imgs/logo.jpg" width="100px">
           </ion-thumbnail>
           <div class="deliver-div">
-          <ion-label>Deliver in around 50min</ion-label>
-          <ion-label>Deliver by Eastern Tandori</ion-label>
+            <ion-label *ngIf="homeDeliviry">Deliver in around {{homeDeliviry}}</ion-label>
+            <ion-label *ngIf="homeDeliviry">Deliver by Eastern Tandori</ion-label>
+            <ion-label *ngIf="!homeDeliviry">You didn't pick an address</ion-label>
+            <ion-label *ngIf="!homeDeliviry">Pick home to see your driver</ion-label>
         </div>
         </ion-item>
       </ion-card>
@@ -33,7 +35,7 @@
         <ion-card>
         <ion-item lines="none" >
           <ion-icon name="home-outline" slot="start"></ion-icon>
-          <ion-input type="text" placeHolder="Add an Address">
+          <ion-input type="text" placeHolder="Add an Address" [(ngModel)]="address">
           </ion-input>
         </ion-item>
       </ion-card>
@@ -65,9 +67,9 @@
         <ion-card style="text-align: center;">
       <ion-item lines="none">
           <ion-text  slot="start">Total</ion-text>
-          <ion-text   slot="end" item-right><strong>Total</strong></ion-text>
+          <ion-text   slot="end" item-right><strong>{{totalPrice}}</strong></ion-text>
       </ion-item>
-      <ion-button class="payButton">
+      <ion-button class="payButton" [disabled]="address == ''">
         <ion-icon name="logo-apple" *ngIf="platform.is('ios')"></ion-icon>
         <ion-icon name="logo-android"  *ngIf="!platform.is('ios')"></ion-icon>
         <ion-label>Pay</ion-label>

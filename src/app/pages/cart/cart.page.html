@@ -35,8 +35,10 @@
             <img src="../../../assets/imgs/logo.jpg" width="100px">
           </ion-thumbnail>
           <div class="deliver-div">
-          <ion-label>Deliver in around 50min</ion-label>
-          <ion-label>Deliver by Eastern Tandori</ion-label>
+          <ion-label *ngIf="homeDeliviry">Deliver in around {{homeDeliviry.duration}}</ion-label>
+          <ion-label *ngIf="homeDeliviry">Deliver by Eastern Tandori</ion-label>
+          <ion-label *ngIf="!homeDeliviry">You didn't pick an address</ion-label>
+          <ion-label *ngIf="!homeDeliviry">Pick home to see your driver</ion-label>
         </div>
         <ion-button slot="end" class="buttonstyle" (click)="openDeliveryHome()">Change</ion-button>
         </ion-item>

@@ -32,6 +32,7 @@ export class AppComponent {
 
     localStorage.setItem("selectedCountry", "IE");
 
+    this.googleMaps.calculateDistance("Medea,Algeria","Blida,Algeria");
     
   }
 
