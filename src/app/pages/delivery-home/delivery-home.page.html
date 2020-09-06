@@ -6,7 +6,8 @@
         <ion-label *ngIf="platform.is('ios')">Back</ion-label>
       </ion-button>
     </ion-buttons>
-    <ion-title>Delivery Home</ion-title>
+    <ion-title *ngIf="mode == 'true' ">Delivery Home</ion-title>
+    <ion-title *ngIf="mode == 'false'">Pick Up</ion-title>
   </ion-toolbar>
 </ion-header>
 
@@ -19,26 +20,50 @@
           <ion-thumbnail>
             <img src="../../../assets/imgs/logo.jpg" width="100px">
           </ion-thumbnail>
-          <div class="deliver-div">
+          <div class="deliver-div" *ngIf="mode == 'true'">
             <ion-label *ngIf="homeDeliviry">Deliver in around {{homeDeliviry}}</ion-label>
             <ion-label *ngIf="homeDeliviry">Deliver by Eastern Tandori</ion-label>
             <ion-label *ngIf="!homeDeliviry">You didn't pick an address</ion-label>
             <ion-label *ngIf="!homeDeliviry">Pick home to see your driver</ion-label>
         </div>
+        <div class="deliver-div" *ngIf="mode == 'false'">
+          <ion-label >Welcome to our restaurant</ion-label>
+          <ion-label >Pick a Date</ion-label>
+      </div>
         </ion-item>
       </ion-card>
       </ion-col>
     </ion-row>
     <ion-row>
-      <ion-col size="12">
+      <ion-col size="12" *ngIf="mode == 'true'">
         <ion-text ><h5><strong>Deliver To</strong></h5></ion-text>
         <ion-card>
-        <ion-item lines="none" >
+        <ion-item lines="none" *ngIf="mode == 'true'" >
           <ion-icon name="home-outline" slot="start"></ion-icon>
-          <ion-input type="text" placeHolder="Add an Address" [(ngModel)]="address">
+          <ion-input type="text" placeHolder="Add an Address" [(ngModel)]="address" (focusout)="calculateDistance()">
           </ion-input>
         </ion-item>
       </ion-card>
+      <ion-col size="12" *ngIf="deliverTime == 'false'">
+        <ion-text ><h5><strong>Pick Time</strong></h5></ion-text>
+      <ion-card>
+        <ion-item lines="none"  >
+          <ion-icon name="timer-outline" slot="start"></ion-icon>
+          <ion-datetime [(ngModel)]="delivryTime" displayFormat="D MMM YYYY H:mm" minuteValues="0,15,30,45" [min]="min" [hourValues]='hours' ></ion-datetime>
+        </ion-item>
+      </ion-card>
+      </ion-col>
+      </ion-col>
+      <ion-col size="12" *ngIf="mode == 'false'">
+      <ion-col size="12" *ngIf="deliverTime == 'false'">
+        <ion-text ><h5><strong>Pick Time</strong></h5></ion-text>
+      <ion-card>
+        <ion-item lines="none"  >
+          <ion-icon name="timer-outline" slot="start"></ion-icon>
+          <ion-datetime [(ngModel)]="delivryTime" displayFormat="D MMM YYYY H:mm" minuteValues="0,15,30,45" [min]="min" [hourValues]='hours' ></ion-datetime>
+        </ion-item>
+      </ion-card>
+      </ion-col>
       </ion-col>
     </ion-row>
     <ion-row>

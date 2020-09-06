@@ -9,6 +9,7 @@ import { CartPageRoutingModule } from "./cart-routing.module";
 import { CartPage } from "./cart.page";
 import { SharedModule } from "src/app/directives/shared.module";
 
+import {PickupmodalPageModule} from '../pickupmodal/pickupmodal.module'
 @NgModule({
   imports: [
     CommonModule,
@@ -16,6 +17,7 @@ import { SharedModule } from "src/app/directives/shared.module";
     IonicModule,
     CartPageRoutingModule,
     SharedModule,
+    PickupmodalPageModule
   ],
   declarations: [CartPage],
 })

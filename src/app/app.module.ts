@@ -37,7 +37,9 @@ import { InAppBrowser } from "@ionic-native/in-app-browser/ngx";
 import {googleMapApi} from '../environments/environment.prod';
 import { NgxIonicImageViewerModule } from "ngx-ionic-image-viewer";
 import {GoogleMapService} from "./services/google-map.service";
+import { PickupmodalPageModule } from './pages/pickupmodal/pickupmodal.module'
 import { NativeGeocoder, NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
+import { PickupmodalPage } from './pages/pickupmodal/pickupmodal.page';
 export function customTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, "./assets/i18n/", ".json");
 }
@@ -73,7 +75,7 @@ export function LanguageLoader(http: HttpClient) {
       apiKey : "AIzaSyDraNOYxpwzp1K8MKF35l47P5ikCrFqraI",
       libraries: ['geometry']
     }
-    )
+    ),
   ],
   providers: [
     StatusBar,

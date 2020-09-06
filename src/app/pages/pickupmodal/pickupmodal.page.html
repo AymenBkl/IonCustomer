@@ -1,0 +1,47 @@
+
+
+<ion-content>
+<ion-grid>
+  <ion-row>
+  <ion-segment (ionChange)="segmentChanged($event)" value="true">
+    <ion-segment-button value="true">
+      <ion-text>Home</ion-text>
+    </ion-segment-button>
+
+    <ion-segment-button value="false">
+      <ion-text>PickUp</ion-text>
+    </ion-segment-button>
+  </ion-segment>
+</ion-row>
+<ion-row>
+  <ion-col size="12">
+  
+    <ion-radio-group  value="true" >
+      <ion-col size="12">
+      <ion-item>
+        <ion-icon slot="start" name="alarm-outline"></ion-icon>
+      <ion-label>Now</ion-label>
+      <ion-radio slot="end" value="true" (click)="changeTime(true)" ></ion-radio>
+    </ion-item>
+  </ion-col>
+  <ion-col size="12">
+    <ion-item >
+      <ion-icon slot="start" name="timer-outline"></ion-icon>
+
+      <ion-label>Schedule for later</ion-label>
+      <ion-radio slot="end" value="false" (click)="changeTime(false)"></ion-radio>
+    </ion-item>
+  </ion-col>
+    </ion-radio-group>
+</ion-col>
+
+</ion-row>
+<ion-row>
+  <ion-col size="12">
+    <ion-button (click)="onSubmit()" >
+      Confirm
+    </ion-button>
+  </ion-col>
+</ion-row>
+</ion-grid>
+</ion-content>

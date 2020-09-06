@@ -149,6 +149,10 @@
           <ion-label class="headerTitle">{{'Item Total'}}</ion-label>
           <ion-label class="price">{{this.currency}} {{totalPrice}}</ion-label>
         </div>
+        <div class="singleRow" *ngIf="homeDeliviry">
+          <ion-label class="headerTitle">{{'Home Delivery'}}</ion-label>
+          <ion-label class="price">{{this.currency}} {{homeprice}}</ion-label>
+        </div>
         <div class="singleRow" hidden>
           <ion-label class="headerTitle"
             >{{'Delivery Charges' | translate}}</ion-label
@@ -161,6 +165,7 @@
           <ion-label class="headerTitle">{{'Dicount' | translate}}</ion-label>
           <ion-label class="price">{{this.currency}} {{dicount}}</ion-label>
         </div>
+        
         <div class="singleRow">
           <ion-label class="headerTotal boldClass"
             >{{'Grand Total' | translate}}</ion-label
@@ -182,7 +187,7 @@
     <ion-toolbar color="primary">
         <ion-label color="light">{{totalItem}} {{'ITEM' | translate}}</ion-label>
         <ion-label color="light">{{this.currency}} {{grandTotal}}</ion-label>
-        <ion-button (click)="checkout()" slot="end" fill="clear" color="light">
+        <ion-button (click)="callPickUpModal()" slot="end" fill="clear" color="light">
             {{'Checkout' | translate}}
         </ion-button>
     </ion-toolbar>

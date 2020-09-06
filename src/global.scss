@@ -72,3 +72,12 @@ ion-modal.modalContact {
   overflow: hidden;
   min-height: 300px;
 }
+
+
+.pickupHalfModal .modal-wrapper {
+  height: 40%;
+  top : 60%;
+  width: 100%;
+  position: absolute;
+  display: block;
+}

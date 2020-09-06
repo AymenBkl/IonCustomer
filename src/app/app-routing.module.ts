@@ -188,6 +188,10 @@ const routes: Routes = [
     path: 'delivery-home',
     loadChildren: () => import('./pages/delivery-home/delivery-home.module').then( m => m.DeliveryHomePageModule)
   },
+  {
+    path: 'pickupmodal',
+    loadChildren: () => import('./pages/pickupmodal/pickupmodal.module').then( m => m.PickupmodalPageModule)
+  },
   
 ];
 @NgModule({

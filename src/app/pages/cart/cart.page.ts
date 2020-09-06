@@ -2,10 +2,11 @@ import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ApisService } from "src/app/services/apis.service";
 import { UtilService } from "src/app/services/util.service";
 import { Router, NavigationExtras } from "@angular/router";
-import { NavController } from "@ionic/angular";
+import { NavController,ModalController } from "@ionic/angular";
 import * as moment from "moment";
 import { DeliveryHomePage } from "../delivery-home/delivery-home.page";
 import { GoogleMapService } from "../../services/google-map.service";
+import { PickupmodalPage } from '../pickupmodal/pickupmodal.page';
 @Component({
   selector: "app-cart",
   templateUrl: "./cart.page.html",
@@ -52,13 +53,17 @@ export class CartPage implements OnInit {
   min: any;
   hours: any;
   homeDeliviry: any;
+  mode : boolean = true;
+  delivertime : boolean = true;
+  homeprice : any;
   constructor(
     private api: ApisService,
     private router: Router,
     private util: UtilService,
     private navCtrl: NavController,
     private chMod: ChangeDetectorRef,
-    private googleMapService: GoogleMapService
+    private googleMapService: GoogleMapService,
+    private modalCntrl : ModalController
   ) {
     this.util.getCouponObservable().subscribe((data) => {
       if (data) {
@@ -247,7 +252,7 @@ export class CartPage implements OnInit {
     const tax = (parseFloat(this.totalPrice) * 21) / 100;
     this.serviceTax = 0;
     console.log("tax->", this.serviceTax);
-    this.deliveryCharge = 0;
+    this.deliveryCharge = this.homeprice;
     this.grandTotal =
       parseFloat(this.totalPrice) +
       parseFloat(this.serviceTax) +
@@ -271,7 +276,7 @@ export class CartPage implements OnInit {
         const tax = (parseFloat(this.totalPrice) * 21) / 100;
         this.serviceTax = 0;
         console.log("tax->", this.serviceTax);
-        this.deliveryCharge = 0;
+        this.deliveryCharge = this.homeprice;
         this.grandTotal =
           parseFloat(this.totalPrice) +
           parseFloat(this.serviceTax) +
@@ -291,7 +296,7 @@ export class CartPage implements OnInit {
         const tax = (parseFloat(this.totalPrice) * 21) / 100;
         this.serviceTax = 0;
         console.log("tax->", this.serviceTax);
-        this.deliveryCharge = 0;
+        this.deliveryCharge = this.homeprice;
         this.grandTotal =
           parseFloat(this.totalPrice) +
           parseFloat(this.serviceTax) +
@@ -468,10 +473,18 @@ export class CartPage implements OnInit {
         resAddress: this.address,
         duration: this.homeDeliviry.duration,
         homeAddress: this.homeDeliviry.address,
+        time : this.delivertime,
+        mode : this.mode,
+        min : this.min,
+        hours : this.hours
       },
     ]);
   }
 
+  CalculatePrice() {
+    const fixedPriceForMeters = 0.00005;
+    this.homeprice = (fixedPriceForMeters*this.homeDeliviry.distance).toFixed(2);
+  }
   CalculateDistance() {
     this.homeDeliviry = JSON.parse(localStorage.getItem("homeAddresse"));
     if (this.homeDeliviry != null) {
@@ -500,8 +513,28 @@ export class CartPage implements OnInit {
         estimated += minutes + " min ";
       }
       console.log(estimated);
-
+      console.log(this.homeDeliviry.distance);
       this.homeDeliviry.duration = estimated;
+      this.CalculatePrice();
     }
+  }
+
+  async callPickUpModal() {
+    const modal = await this.modalCntrl.create({
+      component : PickupmodalPage,
+      swipeToClose : false,
+      cssClass : 'pickupHalfModal'
+
+    });
+
+    modal.onDidDismiss()
+      .then(data => {
+        this.delivertime = data.data.time;
+        this.mode = data.data.mode;
+        this.openDeliveryHome();
+      },err => {
+        this.util.errorToast("An Error Occurred please Try Again !")
+      })
+    return await modal.present();
   }
 }
