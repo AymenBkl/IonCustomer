@@ -94,7 +94,7 @@
           <ion-text  slot="start">Total</ion-text>
           <ion-text   slot="end" item-right><strong>{{totalPrice}}</strong></ion-text>
       </ion-item>
-      <ion-button class="payButton" [disabled]="address == ''">
+      <ion-button class="payButton" [disabled]="address == '' && mode == 'true'" (click)="onSubmit()">
         <ion-icon name="logo-apple" *ngIf="platform.is('ios')"></ion-icon>
         <ion-icon name="logo-android"  *ngIf="!platform.is('ios')"></ion-icon>
         <ion-label>Pay</ion-label>

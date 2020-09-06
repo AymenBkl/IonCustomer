@@ -55,7 +55,7 @@ export class CartPage implements OnInit {
   homeDeliviry: any;
   mode : boolean = true;
   delivertime : boolean = true;
-  homeprice : any;
+  homeprice : any = 0;
   constructor(
     private api: ApisService,
     private router: Router,
@@ -332,11 +332,12 @@ export class CartPage implements OnInit {
     this.router.navigate(["choose-address"], navData);
   }
   checkout() {
+    /** 
     if (this.tableNo.trim() == "") {
       this.util.showToast("Please specify Table Number", "danger", "bottom");
       return false;
     }
-
+    **/
     if (this.minimumOrder && this.minimumOrder > 0) {
       console.log(this.minimumOrder);
       console.log(this.grandTotal);
@@ -469,14 +470,16 @@ export class CartPage implements OnInit {
     this.navCtrl.navigateForward([
       "/delivery-home",
       {
-        totalPrice: this.totalPrice,
+        totalPrice: this.grandTotal,
         resAddress: this.address,
         duration: this.homeDeliviry.duration,
         homeAddress: this.homeDeliviry.address,
         time : this.delivertime,
         mode : this.mode,
         min : this.min,
-        hours : this.hours
+        hours : this.hours,
+        homeprice : this.homeprice,
+        distance : this.homeDeliviry.distance,
       },
     ]);
   }
@@ -516,6 +519,9 @@ export class CartPage implements OnInit {
       console.log(this.homeDeliviry.distance);
       this.homeDeliviry.duration = estimated;
       this.CalculatePrice();
+    }
+    else {
+      this.homeDeliviry = {address : '',distance : '',duration : ''};
     }
   }
 

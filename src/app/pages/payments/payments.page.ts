@@ -9,7 +9,7 @@ import {
   PayPalPayment,
   PayPalConfiguration,
 } from "@ionic-native/paypal/ngx";
-
+import {ActivatedRoute} from '@angular/router' 
 import * as moment from "moment";
 import { environment } from "src/environments/environment";
 
@@ -30,12 +30,18 @@ export class PaymentsPage implements OnInit {
   coupon: any;
   dicount: any;
   payKey: any = "";
+  address : any;
+  mode : any;
+  deliverytime;
+  extraCharge : any;
+  homeDelivery : any;
   constructor(
     private router: Router,
     private api: ApisService,
     private util: UtilService,
     private navCtrl: NavController,
-    private payPal: PayPal
+    private payPal: PayPal,
+    private activtedRouter : ActivatedRoute
   ) {}
 
   async ngOnInit() {
@@ -71,6 +77,8 @@ export class PaymentsPage implements OnInit {
     console.log("COUPON===================", this.coupon);
     console.log("ADDRESS===================", this.deliveryAddress);
     this.calculate(recheck);
+    this.getData();
+    this.createOrder();
   }
 
   async calculate(foods) {
@@ -262,7 +270,7 @@ export class PaymentsPage implements OnInit {
             const newAddress = {
               id: addressId,
               uid: data.uid,
-              address: "Address Created by Application",
+              address: this.address,
               lat: "0",
               lng: "0",
               title: "home",
@@ -310,8 +318,11 @@ export class PaymentsPage implements OnInit {
               address: this.deliveryAddress,
               total: this.totalPrice,
               grandTotal: this.grandTotal,
+              deliverTime:this.deliverytime,
+              mode : this.mode,
+              homeDeliver : this.homeDelivery,
               serviceTax: 0,
-              deliveryCharge: 0,
+              deliveryCharge: this.extraCharge == 0 ? 0 : this.extraCharge,
               status: "created",
               restId: this.vid,
               table: sessionStorage.getItem("tableNo"),
@@ -452,10 +463,12 @@ export class PaymentsPage implements OnInit {
               order: JSON.stringify(recheck),
               time: moment().format("llll"),
               address: this.deliveryAddress,
+              deliverTime:this.deliverytime,
+              mode : this.mode,
               total: this.totalPrice,
               grandTotal: this.grandTotal,
               serviceTax: this.serviceTax,
-              deliveryCharge: 5,
+              deliveryCharge: this.extraCharge,
               status: "accepted",
               restId: this.vid,
               paid: "paypal",
@@ -534,5 +547,13 @@ export class PaymentsPage implements OnInit {
 
   openStripe() {
     this.router.navigate(["stripe-payments"]);
+  }
+
+  getData() {
+    this.address = this.activtedRouter.snapshot.paramMap.get('address');
+    this.deliverytime = this.activtedRouter.snapshot.paramMap.get('time');
+    this.mode = this.activtedRouter.snapshot.paramMap.get('mode');
+    this.extraCharge = this.activtedRouter.snapshot.paramMap.get('homePrice');
+    this.homeDelivery = this.activtedRouter.snapshot.paramMap.get('estimated');
   }
 }
