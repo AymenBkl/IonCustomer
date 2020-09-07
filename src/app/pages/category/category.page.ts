@@ -43,6 +43,8 @@ export class CategoryPage implements OnInit {
   deliveryAddress: any = "";
   currency: any = "";
   extras = [];
+  catDrinkid : any;
+  drinkFoods : any[] = [];
   private allergenInfoImage: any = "";
 
   constructor(
@@ -116,7 +118,6 @@ export class CategoryPage implements OnInit {
           this.changeStatus();
         } else {*/
             this.getCates();
-            this.getFoods();
             this.changeStatus();
             // }
           }
@@ -133,12 +134,20 @@ export class CategoryPage implements OnInit {
 
   }
 
+  checkCatesDrink() {
+    this.categories.forEach(cat => {
+      if (cat.name == "After Dinner Drinks"){
+        this.catDrinkid = cat.id;
+      }
+    });
+  }
   getCates() {
     this.api
       .getVenueCategories(this.id)
       .then(
         (cate) => {
-          console.log(cate);
+          /** here im testing by name so when you get the type of category test by type */
+          console.log("caates",cate);
 
           if (cate) {
             cate = cate.sort(function (a, b) {
@@ -150,6 +159,8 @@ export class CategoryPage implements OnInit {
               }
             });
             this.categories = cate;
+            this.checkCatesDrink();
+            this.getFoods();
           }
         },
         (error) => {
@@ -187,6 +198,7 @@ export class CategoryPage implements OnInit {
               }
             });
             foods.forEach((element) => {
+              
               if (element && element.status === true) {
                 let info = {
                   cid: {
@@ -210,6 +222,10 @@ export class CategoryPage implements OnInit {
                 };
                 this.foods.push(info);
                 this.dummyFoods.push(info);
+                if (element.cid.id === this.catDrinkid){
+                  this.drinkFoods.push(info);
+
+                }
                 if (
                   element &&
                   element.variation &&
@@ -239,6 +255,11 @@ export class CategoryPage implements OnInit {
                   };
                   this.foods.push(info);
                   this.dummyFoods.push(info);
+                  if (element.cid.id === this.catDrinkid){
+                    this.drinkFoods.push(info);
+
+                  }
+  
                 }
 
                 if (
@@ -270,7 +291,11 @@ export class CategoryPage implements OnInit {
                   };
                   this.foods.push(info);
                   this.dummyFoods.push(info);
-                }
+                  if (element.cid.id === this.catDrinkid){
+                    this.drinkFoods.push(info);
+
+                  }
+                  }
 
                 if (
                   element &&
@@ -301,10 +326,17 @@ export class CategoryPage implements OnInit {
                   };
                   this.foods.push(info);
                   this.dummyFoods.push(info);
-                }
+                  if (element.cid.id === this.catDrinkid){
+                    this.drinkFoods.push(info);
+
+                  }
+                  }
               }
             });
             console.log("myfoods", this.foods);
+            console.log("dummy foods",this.foods);
+            console.log("drink",this.drinkFoods);
+
             if (!this.foods.length || this.foods.length === 0) {
               this.util.errorToast(this.util.translate("No Foods found"));
               this.navCtrl.back();
@@ -529,7 +561,8 @@ export class CategoryPage implements OnInit {
     const modal = await this.modalCntrl.create({
       component : OptionsPage,
       componentProps : {
-        "meal" : meal
+        "meal" : meal,
+        "drinks" : this.drinkFoods
       }
     });
 
@@ -537,8 +570,8 @@ export class CategoryPage implements OnInit {
           .then(data => {
             if (data.data != null){
               this.extras.push(Number(data.data.size.extra));
-              
-              this.foods[index].quantiy = 1;
+              this.getSelectedFoodIndex(data.data.drinks);
+              this.foods[index].quantiy = this.foods[index].quantiy + 1;
               this.calculate();
               console.log(data.data.size);
             }
@@ -561,5 +594,11 @@ export class CategoryPage implements OnInit {
     else  {
       return false;
     }
+  }
+
+  getSelectedFoodIndex(selectedDrinks : []) {
+    selectedDrinks.forEach(drink => {
+      this.addQ(this.foods.indexOf(drink));
+    });
   }
 }

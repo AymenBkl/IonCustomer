@@ -14,7 +14,8 @@ export class OptionsPage implements OnInit {
     {val : "Large" , isChecked : false,extra : 0.50}
   ];
   drinks : [];
-  Size ;
+  selectedDrinks : any[] = [];
+  Size : any ;
   ismeal : boolean;
   constructor(private modalCntrl : ModalController,
               private navParams : NavParams,
@@ -22,8 +23,8 @@ export class OptionsPage implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.navParams.data.meal);
     this.ismeal = this.navParams.data.meal;
+    this.drinks = this.navParams.data.drinks;
   }
 
   async dissMiss() {
@@ -42,10 +43,21 @@ export class OptionsPage implements OnInit {
   }
 
   async onSubmit()  {
-    const data = {size : this.Size , drinks : this.drinks}
+    const data = {size : this.Size , drinks : this.selectedDrinks}
     await this.modalCntrl.dismiss(data);
   }
 
+  add(item) {
+    const i = this.selectedDrinks.indexOf(item);
+    if (i == -1){
+      this.selectedDrinks.push(item);
+    }
+    else {
+      this.selectedDrinks.splice(i,1);
+    }
+
+    console.log(this.selectedDrinks);
+  }
   
 
 }

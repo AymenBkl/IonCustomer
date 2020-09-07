@@ -1,6 +1,5 @@
 .input-look {
     background-color : white;
-    border : 1px thick black !important;
 }
 
 .container {
@@ -17,4 +16,19 @@ div ion-button {
     display : flex;
     margin: 10%;
     align-self: center;
+}
+
+ion-item {
+    --border-style : solid;
+    --border-color : rgb(160, 157, 157);
+    --border-width : 0.0001em;
+    --padding-bottom : 1px;
+    --padding-end : 1px;
+    --padding-start : 1px;
+    --padding-top : 1px;
+}
+
+ion-item ion-checkbox {
+    --size : 15px;
+    margin-left : 15px;
 }
