@@ -27,7 +27,7 @@
     </ion-item>
     
   </div>
-    <ion-button (click)="onSubmit()" [disabled]="this.Size == null || this.selectedDrinks.length == 0">Submit</ion-button>
+    <ion-button (click)="onSubmit()" [disabled]="this.Size == null || (this.ismeal && this.selectedDrinks.length == 0)">Submit</ion-button>
   </div>
 
 </ion-content>

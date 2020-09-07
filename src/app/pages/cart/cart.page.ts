@@ -1,18 +1,22 @@
 import { Component, OnInit, ChangeDetectorRef } from "@angular/core";
 import { ApisService } from "src/app/services/apis.service";
 import { UtilService } from "src/app/services/util.service";
-import { Router, NavigationExtras } from "@angular/router";
-import { NavController,ModalController } from "@ionic/angular";
+import { Router, NavigationExtras,ActivatedRoute } from "@angular/router";
+import { NavController,ModalController,AlertController } from "@ionic/angular";
 import * as moment from "moment";
 import { DeliveryHomePage } from "../delivery-home/delivery-home.page";
 import { GoogleMapService } from "../../services/google-map.service";
 import { PickupmodalPage } from '../pickupmodal/pickupmodal.page';
+import { OptionsPage } from '../options/options.page';
+
 @Component({
   selector: "app-cart",
   templateUrl: "./cart.page.html",
   styleUrls: ["./cart.page.scss"],
 })
 export class CartPage implements OnInit {
+  drinkFoods : any[] = [];
+
   haveItems: boolean = false;
   vid: any = "";
   foods: any;
@@ -56,6 +60,9 @@ export class CartPage implements OnInit {
   mode : boolean = true;
   delivertime : boolean = true;
   homeprice : any = 0;
+  customer : any;
+  extras : any[] = [];
+  catDrinkid : any;
   constructor(
     private api: ApisService,
     private router: Router,
@@ -63,7 +70,9 @@ export class CartPage implements OnInit {
     private navCtrl: NavController,
     private chMod: ChangeDetectorRef,
     private googleMapService: GoogleMapService,
-    private modalCntrl : ModalController
+    private modalCntrl : ModalController,
+    private activatedRouter : ActivatedRoute,
+    private alertCntrl : AlertController
   ) {
     this.util.getCouponObservable().subscribe((data) => {
       if (data) {
@@ -81,8 +90,18 @@ export class CartPage implements OnInit {
   }
 
   ngOnInit() {
+  
     this.currency = localStorage.getItem("selectedCountry") == "IE" ? "€" : "£";
     this.CalculateDistance();
+    this.drinkFoods = JSON.parse(localStorage.getItem("drinkFoods"));
+    console.log(this.drinkFoods);
+    if (this.activatedRouter.snapshot.paramMap.get('status') == "false"){
+      this.customer = JSON.parse(this.activatedRouter.snapshot.paramMap.get('customer'));
+    }
+    else if (this.activatedRouter.snapshot.paramMap.get('status') == "true"){
+      this.customer = JSON.parse(this.activatedRouter.snapshot.paramMap.get('customer'));
+      this.navCtrl.navigateForward(["/payments",this.customer]);
+    }
   }
 
   getCoupons() {
@@ -112,7 +131,7 @@ export class CartPage implements OnInit {
         console.log(error);
       });
   }
-
+  
   getAddress() {
     const add = JSON.parse(localStorage.getItem("deliveryAddress"));
     if (add && add.address) {
@@ -216,6 +235,7 @@ export class CartPage implements OnInit {
     this.navCtrl.navigateRoot(["tabs/tab1"]);
   }
 
+  
   updateNotes(index) {
     localStorage.setItem("foods", JSON.stringify(this.foods));
   }
@@ -338,6 +358,7 @@ export class CartPage implements OnInit {
       return false;
     }
     **/
+   if ((this.mode && localStorage.getItem("homeAddresse") != null) || (this.mode == false && this.delivertime == true)){
     if (this.minimumOrder && this.minimumOrder > 0) {
       console.log(this.minimumOrder);
       console.log(this.grandTotal);
@@ -362,7 +383,10 @@ export class CartPage implements OnInit {
       },
     };
     // this.router.navigate(['choose-address'], navData);
-    this.router.navigate(["payments"]);
+    this.router.navigate(["payments",this.customer]);
+  } else {
+    this.openDeliveryHome(false);
+  }
   }
 
   openCoupon() {
@@ -466,7 +490,7 @@ export class CartPage implements OnInit {
     this.displaySegment = order;
   }
 
-  openDeliveryHome(): void {
+  openDeliveryHome(change : boolean): void {
     this.navCtrl.navigateForward([
       "/delivery-home",
       {
@@ -480,6 +504,7 @@ export class CartPage implements OnInit {
         hours : this.hours,
         homeprice : this.homeprice,
         distance : this.homeDeliviry.distance,
+        change : change
       },
     ]);
   }
@@ -535,12 +560,102 @@ export class CartPage implements OnInit {
 
     modal.onDidDismiss()
       .then(data => {
-        this.delivertime = data.data.time;
-        this.mode = data.data.mode;
-        this.openDeliveryHome();
+        this.delivertime = data.data.time == true ? true : false;
+        this.mode = data.data.mode == true ? true : false;
+        this.checkPickModalData();
       },err => {
         this.util.errorToast("An Error Occurred please Try Again !")
       })
     return await modal.present();
   }
+
+  checkPickModalData(){
+    if (this.mode == false && this.delivertime == true){
+      this.checkout();
+    }
+    else {
+      this.openDeliveryHome(true);
+    }
+  }
+
+  async createModal(index,catename)  {
+    let meal : boolean;
+    if (catename === "OaqklHOT2m"){
+      meal = true;
+    }
+    else {
+      meal = false;
+    }
+    const modal = await this.modalCntrl.create({
+      component : OptionsPage,
+      componentProps : {
+        "meal" : meal,
+        "drinks" : this.drinkFoods
+      }
+    });
+
+    modal.onDidDismiss()
+          .then(data => {
+            if (data.data != null){
+              this.extras.push(Number(data.data.size.extra));
+              this.getSelectedFoodIndex(data.data.drinks);
+              this.foods[index].quantiy = this.foods[index].quantiy + 1;
+              this.calculate();
+              console.log(data.data.size);
+            }
+          },
+          err => {
+            console.log(err);
+          });
+    return await modal.present();
+  }
+
+  checkTime() : boolean {
+    let now: string;
+    now = new Date().toString().split(' ')[4];
+    let hours = now.split(':')[0];
+    let minutes = now.split(':')[1];
+    now = "11:00";
+    if (now < this.close && now > this.open){
+      return true;
+    }
+    else  {
+      return false;
+    }
+  }
+
+  getSelectedFoodIndex(selectedDrinks : []) {
+    selectedDrinks.forEach(drink => {
+      const i = this.foods.indexOf(drink);
+      console.log("selected",i);
+      if (i == -1){
+        this.foods.push(drink);
+      }
+      this.addQ(this.foods.indexOf(drink));
+    });
+  }
+
+  add(index,catename) {
+    if (this.checkTime()){
+    this.api
+      .checkAuth()
+      .then(() => {
+        
+          this.createModal(index,catename);
+          console.log(this.foods[index]);
+          
+        
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } else {
+      this.util.errorToast("The restaurant is open from "+ this.open + " to " + this.close);
+
+    }
+
+  }
+
+  
 }
+

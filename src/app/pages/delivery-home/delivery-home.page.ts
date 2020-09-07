@@ -22,13 +22,19 @@ export class DeliveryHomePage implements OnInit {
   min : any;
   homePrice : any;
   distance : any;
+  change : any;
+  currency : any;
   constructor(public platform : Platform,
               private navCntrl : NavController,
               private router : ActivatedRoute,
-              private googleMaps : GoogleMapService) { }
+              private googleMaps : GoogleMapService) { 
+                this.delivryTime = new Date().toISOString();
+              }
 
   ngOnInit() {
     this.getDataFromCarte();
+    this.currency = localStorage.getItem("selectedCountry") == "IE" ? "€" : "£";
+
   }
 
   back() : void {
@@ -46,43 +52,49 @@ export class DeliveryHomePage implements OnInit {
     this.hours = this.router.snapshot.paramMap.get('hours');
     this.homePrice = this.router.snapshot.paramMap.get('homeprice');
     this.distance = this.router.snapshot.paramMap.get('distnace');
+    this.change = this.router.snapshot.paramMap.get('change');
 
   }
 
   calculateDistance() {
-    this.googleMaps.calculateDistance(this.resAdress,this.address);
-    let homeDeliviry = JSON.parse(localStorage.getItem("homeAddresse"));
-    if (homeDeliviry != null) {
-      let estimated = "";
-      const days = Math.floor(homeDeliviry.duration / 86400);
-      const hours = Math.floor(homeDeliviry.duration / 3600) % 24;
-      let minutes = Math.floor(homeDeliviry.duration / 60) % 3600;
-      this.distance = homeDeliviry.distance;
-      this.address = homeDeliviry.address;
-      if (minutes > 45) {
-        minutes = 60;
-      } else if (minutes > 30) {
-        minutes = 45;
-      } else if (minutes > 15) {
-        minutes = 60;
-      } else {
-        minutes = 15;
+    this.googleMaps.calculateDistance(this.resAdress,this.address)
+    .then(() => {
+      let homeDeliviry = JSON.parse(localStorage.getItem("homeAddresse"));
+      if (homeDeliviry != null) {
+        let estimated = "";
+        const days = Math.floor(homeDeliviry.duration / 86400);
+        const hours = Math.floor(homeDeliviry.duration / 3600) % 24;
+        let minutes = Math.floor(homeDeliviry.duration / 60) % 3600;
+        this.distance = homeDeliviry.distance;
+        this.address = homeDeliviry.address;
+        if (minutes > 45) {
+          minutes = 60;
+        } else if (minutes > 30) {
+          minutes = 45;
+        } else if (minutes > 15) {
+          minutes = 60;
+        } else {
+          minutes = 15;
+        }
+        if (days > 0) {
+          estimated += days + " days ";
+        }
+  
+        if (hours > 0) {
+          estimated += hours + " hours ";
+        }
+  
+        if (minutes > 0) {
+          estimated += minutes + " min ";
+        }
+  
+        this.homeDeliviry = estimated;
+        this.CalculatePrice();
       }
-      if (days > 0) {
-        estimated += days + " days ";
-      }
-
-      if (hours > 0) {
-        estimated += hours + " hours ";
-      }
-
-      if (minutes > 0) {
-        estimated += minutes + " min ";
-      }
-
-      this.homeDeliviry = estimated;
-      this.CalculatePrice();
-    }
+    },err => {
+      this.homeDeliviry = null;
+    });
+    
   }
 
   CalculatePrice() {
@@ -93,7 +105,11 @@ export class DeliveryHomePage implements OnInit {
   }
 
   onSubmit()  {
-    this.navCntrl.navigateForward(["/payments",{address : this.address,time : this.delivryTime,mode : this.mode,homePrice : this.homePrice,estimated : this.homeDeliviry}]);
+    this.navCntrl.navigateBack(["tabs/tab3",{status : true,customer : JSON.stringify({address : this.address,time : this.delivryTime,mode : this.mode,homePrice : this.homePrice,estimated : this.homeDeliviry}) }]);
+  }
+
+  onChange() {
+    this.navCntrl.navigateBack(["tabs/tab3",{status : false,customer : JSON.stringify({address : this.address,time : this.delivryTime,mode : this.mode,homePrice : this.homePrice,estimated : this.homeDeliviry}) }]);
   }
 
 }

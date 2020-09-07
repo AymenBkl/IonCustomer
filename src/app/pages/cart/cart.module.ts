@@ -10,6 +10,8 @@ import { CartPage } from "./cart.page";
 import { SharedModule } from "src/app/directives/shared.module";
 
 import {PickupmodalPageModule} from '../pickupmodal/pickupmodal.module'
+import {OptionsPageModule} from "../options/options.module"
+
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +19,8 @@ import {PickupmodalPageModule} from '../pickupmodal/pickupmodal.module'
     IonicModule,
     CartPageRoutingModule,
     SharedModule,
-    PickupmodalPageModule
+    PickupmodalPageModule,
+    OptionsPageModule
   ],
   declarations: [CartPage],
 })

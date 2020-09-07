@@ -77,7 +77,8 @@ export class GoogleMapService extends GoogleMapsAPIWrapper {
 }
 
 calculateDistance(address1 : string,address2 : string)  {
-  this.getLatLan(address1,true)
+  return new Promise((resolve,reject) => {
+    this.getLatLan(address1,true)
     .subscribe(data => {
       this.getLatLan(address2,false)
         .subscribe(data => {
@@ -95,16 +96,21 @@ calculateDistance(address1 : string,address2 : string)  {
             const duration =  result.duration.value.toFixed();
             localStorage.removeItem("homeAddresse");
             localStorage.setItem("homeAddresse",'{"address" : "'+ address2 + '","distance" : "'+ distance +'", "duration" : "'+ duration +'" }');
+            resolve();
           }
         })
           console.log(google.maps.geometry.spherical.computeDistanceBetween(this.place1,this.place2));
           console.log("data maps",data);
         },err => {
+          reject(err)
           console.log("errr",err);
         })
       console.log("data maps",data);
     },err => {
+      reject(err);
       console.log("errr",err);
     })
+  })
+  
 }
 }

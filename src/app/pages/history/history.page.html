@@ -84,8 +84,8 @@
           <ion-label class="small_lbl" *ngIf="item.mode == 'true'">{{'Deliver In ' + item.homeDeliver}} </ion-label>
           <ion-label class="head_gray" *ngIf="item.mode == 'true'">{{'Extra Charge' | translate}}</ion-label>
           <ion-label class="small_lbl" *ngIf="item.mode == 'true'"> {{item.deliveryCharge}} {{this.currency}} </ion-label>
-          <ion-label class="head_gray" *ngIf="item.mode == 'true' && item.deliverTime !='undefined'">{{'Need It In' | translate}}</ion-label>
-          <ion-label class="small_lbl" *ngIf="item.mode == 'true' && item.deliverTime !='undefined'"> {{getDate(item.deliverTime)}}  </ion-label>
+          <ion-label class="head_gray" *ngIf="item.mode == 'true' && item.deliverTime !='undefined' && item.deliverTime ">{{'Need It In' | translate}}</ion-label>
+          <ion-label class="small_lbl" *ngIf="item.mode == 'true' && item.deliverTime !='undefined' && item.deliverTime "> {{getDate(item.deliverTime)}}  </ion-label>
           <ion-label class="head_gray" *ngIf="item.mode == 'false'">{{'Pick Up' | translate}}</ion-label>
           <ion-label class="small_lbl" *ngIf="item.mode == 'false' && item.deliverTime !='undefined'">{{getDate(item.deliverTime)}} </ion-label>
           <ion-label class="small_lbl" *ngIf="item.mode == 'false' && item.deliverTime =='undefined'">{{"NOW"}} </ion-label>

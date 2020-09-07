@@ -40,7 +40,7 @@
           <ion-label *ngIf="!homeDeliviry">You didn't pick an address</ion-label>
           <ion-label *ngIf="!homeDeliviry">Pick home to see your driver</ion-label>
         </div>
-        <ion-button slot="end" class="buttonstyle" (click)="openDeliveryHome()">Change</ion-button>
+        <ion-button slot="end" class="buttonstyle" (click)="callPickUpModal()">Change</ion-button>
         </ion-item>
       </ion-col>
       </ion-row>
@@ -130,7 +130,7 @@
                 <ion-icon name="remove"></ion-icon>
               </ion-button>
               <p class="qunitity">{{item.quantiy}}</p>
-              <ion-button (click)="addQ(i)" fill="clear" size="small">
+              <ion-button (click)="add(i,item.cid.id)" fill="clear" size="small">
                 <ion-icon name="add"></ion-icon>
               </ion-button>
             </div>
@@ -187,7 +187,7 @@
     <ion-toolbar color="primary">
         <ion-label color="light">{{totalItem}} {{'ITEM' | translate}}</ion-label>
         <ion-label color="light">{{this.currency}} {{grandTotal}}</ion-label>
-        <ion-button (click)="callPickUpModal()" slot="end" fill="clear" color="light">
+        <ion-button (click)="checkout()" slot="end" fill="clear" color="light">
             {{'Checkout' | translate}}
         </ion-button>
     </ion-toolbar>

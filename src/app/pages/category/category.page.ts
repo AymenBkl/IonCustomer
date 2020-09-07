@@ -430,12 +430,15 @@ export class CategoryPage implements OnInit {
     if (vid && vid === this.id && this.totalPrice > 0) {
       localStorage.setItem("vid", this.id);
       await localStorage.setItem("foods", JSON.stringify(this.foods));
+      localStorage.setItem("drinkFoods",JSON.stringify(this.drinkFoods));
       localStorage.setItem("categories", JSON.stringify(this.categories));
       localStorage.setItem("dummyItem", JSON.stringify(this.dummyFoods));
       localStorage.setItem("totalItem", this.totalItem);
       localStorage.setItem("totalPrice", this.totalPrice);
     } else if (!vid && this.totalItem > 0) {
       localStorage.setItem("vid", this.id);
+      localStorage.setItem("drinkFoods",JSON.stringify(this.drinkFoods));
+
       await localStorage.setItem("foods", JSON.stringify(this.foods));
       localStorage.setItem("categories", JSON.stringify(this.categories));
       localStorage.setItem("dummyItem", JSON.stringify(this.dummyFoods));
