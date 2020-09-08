@@ -78,7 +78,6 @@ export class PaymentsPage implements OnInit {
     console.log("ADDRESS===================", this.deliveryAddress);
     this.calculate(recheck);
     this.getData();
-    this.createOrder();
   }
 
   async calculate(foods) {

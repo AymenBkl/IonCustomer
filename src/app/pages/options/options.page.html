@@ -25,8 +25,13 @@
       <ion-checkbox slot="start" (click)="add(drink)"></ion-checkbox>
       <label>{{drink.name}}</label>
     </ion-item>
-    
   </div>
+
+    <h3>Addons (optional) </h3>
+      <ion-item lines="none" class="input-look" *ngFor="let addon of addons;">
+      <ion-checkbox slot="start" (click)="adda(addon)"></ion-checkbox>
+      <label>{{addon.name}}</label>
+    </ion-item>
     <ion-button (click)="onSubmit()" [disabled]="this.Size == null || (this.ismeal && this.selectedDrinks.length == 0)">Submit</ion-button>
   </div>
 

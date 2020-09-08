@@ -63,6 +63,7 @@ export class CartPage implements OnInit {
   customer : any;
   extras : any[] = [];
   catDrinkid : any;
+  addons : any[] = [];
   constructor(
     private api: ApisService,
     private router: Router,
@@ -94,7 +95,7 @@ export class CartPage implements OnInit {
     this.currency = localStorage.getItem("selectedCountry") == "IE" ? "€" : "£";
     this.CalculateDistance();
     this.drinkFoods = JSON.parse(localStorage.getItem("drinkFoods"));
-    console.log(this.drinkFoods);
+    this.addons = JSON.parse(localStorage.getItem("Addons"));
     if (this.activatedRouter.snapshot.paramMap.get('status') == "false"){
       this.customer = JSON.parse(this.activatedRouter.snapshot.paramMap.get('customer'));
     }
@@ -382,8 +383,13 @@ export class CartPage implements OnInit {
         from: "cart",
       },
     };
+    if (this.customer){
+      this.router.navigate(["payments",this.customer]);
+    }
+    else {
+      this.router.navigate(["payments",{mode : this.mode,homePrice : this.grandTotal}]);
+    }
     // this.router.navigate(['choose-address'], navData);
-    this.router.navigate(["payments",this.customer]);
   } else {
     this.openDeliveryHome(false);
   }
@@ -590,7 +596,8 @@ export class CartPage implements OnInit {
       component : OptionsPage,
       componentProps : {
         "meal" : meal,
-        "drinks" : this.drinkFoods
+        "drinks" : this.drinkFoods,
+        "addons" : this.addons
       }
     });
 
@@ -599,6 +606,7 @@ export class CartPage implements OnInit {
             if (data.data != null){
               this.extras.push(Number(data.data.size.extra));
               this.getSelectedFoodIndex(data.data.drinks);
+              this.getSelectedFoodIndex(data.data.addons);
               this.foods[index].quantiy = this.foods[index].quantiy + 1;
               this.calculate();
               console.log(data.data.size);
@@ -609,6 +617,7 @@ export class CartPage implements OnInit {
           });
     return await modal.present();
   }
+
 
   checkTime() : boolean {
     let now: string;

@@ -45,6 +45,8 @@ export class CategoryPage implements OnInit {
   extras = [];
   catDrinkid : any;
   drinkFoods : any[] = [];
+  addons : any[] = [];
+  addonsid : any;
   private allergenInfoImage: any = "";
 
   constructor(
@@ -139,8 +141,15 @@ export class CategoryPage implements OnInit {
       if (cat.name == "After Dinner Drinks"){
         this.catDrinkid = cat.id;
       }
+      else if (cat.name == "Wines"){
+        this.addonsid = cat.id;
+        console.log("iiiiiiiid",this.addonsid);
+
+      }
     });
   }
+
+  
   getCates() {
     this.api
       .getVenueCategories(this.id)
@@ -226,6 +235,9 @@ export class CategoryPage implements OnInit {
                   this.drinkFoods.push(info);
 
                 }
+                else if (element.cid.id === this.addonsid){
+                  this.addons.push(info);
+                }
                 if (
                   element &&
                   element.variation &&
@@ -258,6 +270,8 @@ export class CategoryPage implements OnInit {
                   if (element.cid.id === this.catDrinkid){
                     this.drinkFoods.push(info);
 
+                  } else if (element.cid.id === this.addonsid){
+                    this.addons.push(info);
                   }
   
                 }
@@ -295,6 +309,9 @@ export class CategoryPage implements OnInit {
                     this.drinkFoods.push(info);
 
                   }
+                  else if (element.cid.id === this.addonsid){
+                    this.addons.push(info);
+                  }
                   }
 
                 if (
@@ -329,6 +346,9 @@ export class CategoryPage implements OnInit {
                   if (element.cid.id === this.catDrinkid){
                     this.drinkFoods.push(info);
 
+                  }
+                  else if (element.cid.id === this.addonsid){
+                    this.addons.push(info);
                   }
                   }
               }
@@ -431,6 +451,7 @@ export class CategoryPage implements OnInit {
       localStorage.setItem("vid", this.id);
       await localStorage.setItem("foods", JSON.stringify(this.foods));
       localStorage.setItem("drinkFoods",JSON.stringify(this.drinkFoods));
+      localStorage.setItem("Addons",JSON.stringify(this.addons));
       localStorage.setItem("categories", JSON.stringify(this.categories));
       localStorage.setItem("dummyItem", JSON.stringify(this.dummyFoods));
       localStorage.setItem("totalItem", this.totalItem);
@@ -438,6 +459,7 @@ export class CategoryPage implements OnInit {
     } else if (!vid && this.totalItem > 0) {
       localStorage.setItem("vid", this.id);
       localStorage.setItem("drinkFoods",JSON.stringify(this.drinkFoods));
+      localStorage.setItem("Addons",JSON.stringify(this.addons));
 
       await localStorage.setItem("foods", JSON.stringify(this.foods));
       localStorage.setItem("categories", JSON.stringify(this.categories));
@@ -565,7 +587,8 @@ export class CategoryPage implements OnInit {
       component : OptionsPage,
       componentProps : {
         "meal" : meal,
-        "drinks" : this.drinkFoods
+        "drinks" : this.drinkFoods,
+        "addons" : this.addons
       }
     });
 
@@ -574,6 +597,7 @@ export class CategoryPage implements OnInit {
             if (data.data != null){
               this.extras.push(Number(data.data.size.extra));
               this.getSelectedFoodIndex(data.data.drinks);
+              this.getSelectedFoodIndex(data.data.addons);
               this.foods[index].quantiy = this.foods[index].quantiy + 1;
               this.calculate();
               console.log(data.data.size);
@@ -590,7 +614,6 @@ export class CategoryPage implements OnInit {
     now = new Date().toString().split(' ')[4];
     let hours = now.split(':')[0];
     let minutes = now.split(':')[1];
-    now = "11:00";
     if (now < this.close && now > this.open){
       return true;
     }
